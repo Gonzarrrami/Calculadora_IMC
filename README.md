@@ -78,11 +78,11 @@ com.gonzalo.calculadora_imc
 
 ## Cambiar las ilustraciones
 
-Los muñecos actuales son **provisionales**. Hay 12 archivos en `app/src/main/res/drawable`, uno por categoría y por sexo:
+Hay 12 dibujos en `app/src/main/res/drawable`, uno por categoría y por sexo:
 
 ```
-imc_hombre_1.xml … imc_hombre_6.xml
-imc_mujer_1.xml  … imc_mujer_6.xml
+imc_hombre_1.png … imc_hombre_6.png   → dibujos definitivos, hechos a mano
+imc_mujer_1.xml  … imc_mujer_6.xml    → muñecos provisionales
 ```
 
 El número es la columna **#** de la tabla de arriba (1 = Bajo peso … 6 = Obesidad de grado III).
