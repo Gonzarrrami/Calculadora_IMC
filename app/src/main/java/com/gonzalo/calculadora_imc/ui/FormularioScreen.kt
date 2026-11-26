@@ -45,6 +45,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -118,9 +119,10 @@ fun FormularioScreen(
                 LogoCircular(icono = R.drawable.ic_bascula, tamanoIcono = 36.dp)
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    text = "IMC",
+                    text = "Calculadora de IMC",
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,   // si no cabe en una línea, las dos quedan centradas
                 )
                 Text(
                     text = "Índice de masa corporal",

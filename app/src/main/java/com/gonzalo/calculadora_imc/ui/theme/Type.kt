@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 // Tipografía de la app: la escala por defecto de Material 3 (fuente Roboto),
-// con un único cambio: el título "IMC" muy grueso, como en el diseño de Figma.
+// con un único cambio: el título "Calculadora de IMC" muy grueso, como en el diseño de Figma.
 val Typography = Typography(
     headlineLarge = TextStyle(
         fontWeight = FontWeight.Black,
