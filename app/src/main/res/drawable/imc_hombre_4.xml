@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Dibujo PROVISIONAL: hombre, estado 4 de 8. Sustitúyelo por tu propio dibujo con el mismo nombre. -->
+<!-- Dibujo PROVISIONAL: hombre, estado 4 de 6. Sustitúyelo por tu propio dibujo con el mismo nombre. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="120dp"
     android:height="150dp"
     android:viewportWidth="120"
     android:viewportHeight="150">
-    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FF1A1B20" android:strokeWidth="2" android:pathData="M36,98 h12 v44 h-12 z" />
-    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FF1A1B20" android:strokeWidth="2" android:pathData="M72,98 h12 v44 h-12 z" />
-    <path android:strokeColor="#FF1A1B20" android:strokeWidth="7" android:strokeLineCap="round" android:pathData="M40,62 L28,96 M80,62 L92,96" />
-    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FF1A1B20" android:strokeWidth="2" android:pathData="M37,78 a23,30 0 1,0 46,0 a23,30 0 1,0 -46,0 z" />
+    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FF1A1B20" android:strokeWidth="2" android:pathData="M33,98 h12 v44 h-12 z" />
+    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FF1A1B20" android:strokeWidth="2" android:pathData="M75,98 h12 v44 h-12 z" />
+    <path android:strokeColor="#FF1A1B20" android:strokeWidth="7" android:strokeLineCap="round" android:pathData="M33,62 L21,96 M87,62 L99,96" />
+    <path android:fillColor="#FFFFFFFF" android:strokeColor="#FF1A1B20" android:strokeWidth="2" android:pathData="M30,78 a30,30 0 1,0 60,0 a30,30 0 1,0 -60,0 z" />
     <path android:fillColor="#FFFFFFFF" android:strokeColor="#FF1A1B20" android:strokeWidth="2" android:pathData="M46,28 a14,14 0 1,0 28,0 a14,14 0 1,0 -28,0 z" />
     <path android:fillColor="#FF5A3E2B" android:pathData="M46,26 a14,13 0 0,1 28,0 q-8,-5 -14,-3 q-7,-2 -14,3 z" />
 </vector>

@@ -1,13 +1,13 @@
 # Calculadora IMC
 
-App Android hecha 100 % con **Jetpack Compose** que calcula el **índice de masa corporal (IMC)** y muestra el estado de la persona según la tabla oficial de la SEEDO, con una ilustración distinta para cada estado y para cada sexo.
+App Android hecha 100 % con **Jetpack Compose** que calcula el **índice de masa corporal (IMC)** y muestra el estado de la persona según la clasificación oficial de la OMS, con una ilustración distinta para cada estado y para cada sexo.
 
 No usa layouts XML, librerías de navegación ni ViewModel: solo **estado + funciones composables**.
 
 <p align="center">
   <img src="docs/capturas/formulario.png" width="220" alt="Formulario con un peso fuera de rango marcado en rojo">
-  <img src="docs/capturas/resultado.png" width="220" alt="Resultado en modo claro: IMC 33,1, obesidad de tipo I">
-  <img src="docs/capturas/resultado_oscuro.png" width="220" alt="Resultado en modo oscuro: IMC 27,0, sobrepeso de grado II">
+  <img src="docs/capturas/resultado.png" width="220" alt="Resultado en modo claro: IMC 33,1, obesidad de grado I">
+  <img src="docs/capturas/resultado_oscuro.png" width="220" alt="Resultado en modo oscuro: IMC 27,0, sobrepeso">
 </p>
 
 ## Cómo funciona
@@ -28,20 +28,18 @@ IMC = peso (kg) / estatura (m)²
 - El IMC se redondea a un decimal **antes** de clasificarlo, para que el número que ves y el estado siempre coincidan.
 - **El sexo no forma parte de la fórmula**: solo sirve para elegir la ilustración.
 
-### Rangos oficiales (SEEDO)
+### Rangos oficiales (OMS)
 
-Clasificación de la Sociedad Española para el Estudio de la Obesidad (consenso de 2007):
+Clasificación del IMC en adultos de la Organización Mundial de la Salud: 6 categorías.
 
-| IMC | Estado |
-| --- | --- |
-| menor de 18,5 | Peso insuficiente |
-| 18,5 – 24,9 | Normopeso |
-| 25,0 – 26,9 | Sobrepeso de grado I |
-| 27,0 – 29,9 | Sobrepeso de grado II (preobesidad) |
-| 30,0 – 34,9 | Obesidad de tipo I |
-| 35,0 – 39,9 | Obesidad de tipo II |
-| 40,0 – 49,9 | Obesidad de tipo III (mórbida) |
-| 50,0 o más | Obesidad de tipo IV (extrema) |
+| # | IMC (kg/m²) | Categoría |
+| --- | --- | --- |
+| 1 | menor de 18,5 | Bajo peso |
+| 2 | desde 18,5 hasta menos de 25 | Peso normal |
+| 3 | desde 25 hasta menos de 30 | Sobrepeso |
+| 4 | desde 30 hasta menos de 35 | Obesidad de grado I |
+| 5 | desde 35 hasta menos de 40 | Obesidad de grado II |
+| 6 | 40 o más | Obesidad de grado III |
 
 ### Validación
 
@@ -80,14 +78,14 @@ com.gonzalo.calculadora_imc
 
 ## Cambiar las ilustraciones
 
-Los muñecos actuales son **provisionales**. Hay 16 archivos en `app/src/main/res/drawable`, uno por estado y por sexo:
+Los muñecos actuales son **provisionales**. Hay 12 archivos en `app/src/main/res/drawable`, uno por categoría y por sexo:
 
 ```
-imc_hombre_1.xml … imc_hombre_8.xml
-imc_mujer_1.xml  … imc_mujer_8.xml
+imc_hombre_1.xml … imc_hombre_6.xml
+imc_mujer_1.xml  … imc_mujer_6.xml
 ```
 
-El número es la posición del estado en la tabla de arriba (1 = Peso insuficiente … 8 = Obesidad de tipo IV).
+El número es la columna **#** de la tabla de arriba (1 = Bajo peso … 6 = Obesidad de grado III).
 
 Para poner un dibujo tuyo:
 
@@ -109,6 +107,6 @@ Requisitos: Android 8.0 (API 26) o superior.
 
 - Basado en el tutorial [Login_compose](https://github.com/sulbaranjc/Login_compose) de Juan Carlos Sulbaran Gonzalez y en mi versión del login, [Login_compose](https://github.com/Gonzarrrami/Login_compose).
 - El estilo del formulario es una adaptación de [Login Page](https://www.figma.com/community/file/1244126388179404671/login-page), de Adarsh, publicado en la comunidad de Figma con licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-- Rangos del IMC: consenso SEEDO 2007 (Sociedad Española para el Estudio de la Obesidad).
+- Rangos del IMC: clasificación de la OMS (Organización Mundial de la Salud) para adultos.
 
 > Esta app es un ejercicio de clase. El IMC es una medida orientativa y no sustituye la valoración de un profesional sanitario.

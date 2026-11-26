@@ -22,7 +22,7 @@ enum class Sexo(val texto: String) {
 
 /**
  * Un rango del IMC: su nombre y el intervalo [minimo, maximo).
- * "maximo" no se incluye: un IMC de 25,0 ya es "Sobrepeso de grado I".
+ * "maximo" no se incluye: un IMC de 25,0 ya es "Sobrepeso".
  */
 data class RangoImc(
     val nombre: String,
@@ -31,34 +31,32 @@ data class RangoImc(
 )
 
 /**
- * LISTA INMUTABLE con los rangos oficiales de la SEEDO
- * (Sociedad Española para el Estudio de la Obesidad, consenso de 2007).
+ * LISTA INMUTABLE con la clasificación oficial de la OMS (Organización Mundial
+ * de la Salud) para adultos: 6 clases.
  * "listOf" crea una lista que no se puede modificar: los rangos nunca cambian.
  */
 val RANGOS_IMC: List<RangoImc> = listOf(
-    RangoImc("Peso insuficiente", 0.0, 18.5),
-    RangoImc("Normopeso", 18.5, 25.0),
-    RangoImc("Sobrepeso de grado I", 25.0, 27.0),
-    RangoImc("Sobrepeso de grado II (preobesidad)", 27.0, 30.0),
-    RangoImc("Obesidad de tipo I", 30.0, 35.0),
-    RangoImc("Obesidad de tipo II", 35.0, 40.0),
-    RangoImc("Obesidad de tipo III (mórbida)", 40.0, 50.0),
-    RangoImc("Obesidad de tipo IV (extrema)", 50.0, Double.POSITIVE_INFINITY),
+    RangoImc("Bajo peso", 0.0, 18.5),
+    RangoImc("Peso normal", 18.5, 25.0),
+    RangoImc("Sobrepeso", 25.0, 30.0),
+    RangoImc("Obesidad de grado I", 30.0, 35.0),
+    RangoImc("Obesidad de grado II", 35.0, 40.0),
+    RangoImc("Obesidad de grado III", 40.0, Double.POSITIVE_INFINITY),
 )
 
 /**
  * LISTAS INMUTABLES con una ilustración por rango, en el MISMO orden que RANGOS_IMC.
  * Para poner tus propios dibujos, sustituye los archivos de res/drawable
- * manteniendo el mismo nombre (imc_hombre_1 ... imc_mujer_8).
+ * manteniendo el mismo nombre (imc_hombre_1 ... imc_mujer_6).
  */
 val ILUSTRACIONES: Map<Sexo, List<Int>> = mapOf(
     Sexo.HOMBRE to listOf(
-        R.drawable.imc_hombre_1, R.drawable.imc_hombre_2, R.drawable.imc_hombre_3, R.drawable.imc_hombre_4,
-        R.drawable.imc_hombre_5, R.drawable.imc_hombre_6, R.drawable.imc_hombre_7, R.drawable.imc_hombre_8,
+        R.drawable.imc_hombre_1, R.drawable.imc_hombre_2, R.drawable.imc_hombre_3,
+        R.drawable.imc_hombre_4, R.drawable.imc_hombre_5, R.drawable.imc_hombre_6,
     ),
     Sexo.MUJER to listOf(
-        R.drawable.imc_mujer_1, R.drawable.imc_mujer_2, R.drawable.imc_mujer_3, R.drawable.imc_mujer_4,
-        R.drawable.imc_mujer_5, R.drawable.imc_mujer_6, R.drawable.imc_mujer_7, R.drawable.imc_mujer_8,
+        R.drawable.imc_mujer_1, R.drawable.imc_mujer_2, R.drawable.imc_mujer_3,
+        R.drawable.imc_mujer_4, R.drawable.imc_mujer_5, R.drawable.imc_mujer_6,
     ),
 )
 
@@ -69,7 +67,7 @@ fun calcularImc(pesoKg: Double, estaturaCm: Double): Double {
     return (imc * 10).roundToInt() / 10.0   // redondeamos ANTES de clasificar, para que número y estado coincidan
 }
 
-/** Posición del rango que corresponde a un IMC (0 = Peso insuficiente ... 7 = Obesidad de tipo IV). */
+/** Posición del rango que corresponde a un IMC (0 = Bajo peso ... 5 = Obesidad de grado III). */
 fun indiceRango(imc: Double): Int = RANGOS_IMC.indexOfFirst { imc < it.maximo }
 
 /** Escribe un número con coma decimal, como se hace en España: 24.3 -> "24,3". */
