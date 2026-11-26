@@ -2,6 +2,8 @@
 
 App Android hecha 100 % con **Jetpack Compose** que calcula el **índice de masa corporal (IMC)** y muestra el estado de la persona según la clasificación oficial de la OMS, con una ilustración distinta para cada estado y para cada sexo.
 
+Todo lo que se ve es **dibujado a mano**: los muñecos del resultado y también los textos, las cajas, los círculos y el botón del formulario.
+
 No usa layouts XML, librerías de navegación ni ViewModel: solo **estado + funciones composables**.
 
 <p align="center">
@@ -92,6 +94,16 @@ Son PNG con fondo transparente, recortados a su contenido. La app los ajusta al 
 Para cambiar un dibujo, sustituye el PNG por otro con **el mismo nombre** y vuelve a ejecutar la app. No hay que tocar código.
 
 > El nombre debe ir en minúsculas, sin espacios ni tildes, o Android no lo reconoce.
+
+## El formulario dibujado a mano
+
+Los textos, las cajas, los círculos de selección y el botón del formulario también son dibujos. Están en `app/src/main/res/drawable-nodpi`, con nombres que empiezan por `form_` (`form_titulo`, `form_caja_larga`, `form_boton`…).
+
+- Son PNG con **tinta negra sobre fondo transparente**. En la app se tiñen con `ColorFilter.tint`: blancos sobre el fondo oscuro y **rojos** cuando un valor está mal (la caja, la unidad y el aviso).
+- Los campos son `BasicTextField`, un campo de texto sin bordes. La caja dibujada se pone detrás, estirada a su tamaño (`ContentScale.FillBounds`). **Lo que escribe el usuario va con letra normal**, dentro de la caja.
+- Cuando el botón está desactivado se ve más clarito (`alpha`) y no responde.
+- Cada dibujo tiene su `contentDescription`, así que los lectores de pantalla siguen leyendo "Nombre", "Calcular IMC", etc.
+- Están en `drawable-nodpi` para que Android no los reescale según la pantalla: el tamaño lo decide el código.
 
 ## Ejecutarlo
 
