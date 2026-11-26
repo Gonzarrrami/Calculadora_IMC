@@ -76,24 +76,22 @@ com.gonzalo.calculadora_imc
   <img src="docs/capturas/resultado_horizontal.png" width="560" alt="Resultado con el móvil en horizontal">
 </p>
 
-## Cambiar las ilustraciones
+## Las ilustraciones
 
-Hay 12 dibujos en `app/src/main/res/drawable`, uno por categoría y por sexo:
+Los 12 dibujos están hechos a mano: uno por categoría y por sexo. Están en `app/src/main/res/drawable`:
 
 ```
-imc_hombre_1.png … imc_hombre_6.png   → dibujos definitivos, hechos a mano
-imc_mujer_1.xml  … imc_mujer_6.xml    → muñecos provisionales
+imc_hombre_1.png … imc_hombre_6.png
+imc_mujer_1.png  … imc_mujer_6.png
 ```
 
 El número es la columna **#** de la tabla de arriba (1 = Bajo peso … 6 = Obesidad de grado III).
 
-Para poner un dibujo tuyo:
+Son PNG con fondo transparente, recortados a su contenido. La app los ajusta al marco sin deformarlos.
 
-1. Borra el `.xml` que quieres sustituir, por ejemplo `imc_mujer_3.xml`.
-2. Copia tu imagen en `app/src/main/res/drawable` con **el mismo nombre**: `imc_mujer_3.png`.
-3. Vuelve a ejecutar la app. No hay que tocar código.
+Para cambiar un dibujo, sustituye el PNG por otro con **el mismo nombre** y vuelve a ejecutar la app. No hay que tocar código.
 
-> El nombre debe ir en minúsculas, sin espacios ni tildes, o Android no lo reconoce. No puede haber a la vez un `.xml` y un `.png` con el mismo nombre.
+> El nombre debe ir en minúsculas, sin espacios ni tildes, o Android no lo reconoce.
 
 ## Ejecutarlo
 
