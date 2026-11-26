@@ -1,0 +1,114 @@
+# Calculadora IMC
+
+App Android hecha 100 % con **Jetpack Compose** que calcula el **índice de masa corporal (IMC)** y muestra el estado de la persona según la tabla oficial de la SEEDO, con una ilustración distinta para cada estado y para cada sexo.
+
+No usa layouts XML, librerías de navegación ni ViewModel: solo **estado + funciones composables**.
+
+<p align="center">
+  <img src="docs/capturas/formulario.png" width="220" alt="Formulario con un peso fuera de rango marcado en rojo">
+  <img src="docs/capturas/resultado.png" width="220" alt="Resultado en modo claro: IMC 33,1, obesidad de tipo I">
+  <img src="docs/capturas/resultado_oscuro.png" width="220" alt="Resultado en modo oscuro: IMC 27,0, sobrepeso de grado II">
+</p>
+
+## Cómo funciona
+
+1. **Formulario**: escribes tu nombre, eliges el sexo e introduces el peso (kg) y la estatura (cm).
+2. Pulsas **Calcular IMC**. El botón solo se activa cuando están todos los campos rellenos.
+3. **Resultado**: aparece tu nombre, el IMC con un decimal, la ilustración que te corresponde y tu estado (valor cualitativo).
+4. **Volver** te lleva de nuevo al formulario, vacío.
+
+### La fórmula
+
+```
+IMC = peso (kg) / estatura (m)²
+```
+
+- La estatura se escribe en centímetros y la app la pasa a metros.
+- El peso admite coma o punto decimal: `72,5` y `72.5` valen igual.
+- El IMC se redondea a un decimal **antes** de clasificarlo, para que el número que ves y el estado siempre coincidan.
+- **El sexo no forma parte de la fórmula**: solo sirve para elegir la ilustración.
+
+### Rangos oficiales (SEEDO)
+
+Clasificación de la Sociedad Española para el Estudio de la Obesidad (consenso de 2007):
+
+| IMC | Estado |
+| --- | --- |
+| menor de 18,5 | Peso insuficiente |
+| 18,5 – 24,9 | Normopeso |
+| 25,0 – 26,9 | Sobrepeso de grado I |
+| 27,0 – 29,9 | Sobrepeso de grado II (preobesidad) |
+| 30,0 – 34,9 | Obesidad de tipo I |
+| 35,0 – 39,9 | Obesidad de tipo II |
+| 40,0 – 49,9 | Obesidad de tipo III (mórbida) |
+| 50,0 o más | Obesidad de tipo IV (extrema) |
+
+### Validación
+
+| Campo | Valores aceptados |
+| --- | --- |
+| Peso | de 2 a 500 kg |
+| Estatura | de 50 a 250 cm |
+
+Si un valor está fuera de rango, el campo se pone en rojo con un aviso y no se calcula nada. El aviso desaparece al volver a escribir.
+
+## Estructura del proyecto
+
+```
+com.gonzalo.calculadora_imc
+├── MainActivity.kt          → decide QUÉ pantalla se ve (un único estado: el resultado)
+├── imc
+│   └── Imc.kt               → lógica: fórmula, rangos e ilustraciones (sin interfaz)
+└── ui
+    ├── FormularioScreen.kt  → pantalla 1: nombre, sexo, peso y estatura
+    ├── ResultadoScreen.kt   → pantalla 2: IMC, ilustración y estado
+    ├── LogoCircular.kt      → componente reutilizable
+    └── theme                → colores, tipografía y temas claro/oscuro
+```
+
+### Ideas de Compose que se practican
+
+- **Estado que baja, eventos que suben.** El formulario no abre el resultado: solo avisa con `onCalcular(resultado)`. `MainActivity` guarda ese resultado y Compose cambia de pantalla solo.
+- **Un solo estado para navegar.** `resultado == null` muestra el formulario; con un resultado se muestra la pantalla de resultado. **Volver** lo pone otra vez a `null`.
+- **Listas inmutables.** Los rangos (`RANGOS_IMC`) y las ilustraciones (`ILUSTRACIONES`) son `listOf(...)` y `mapOf(...)`: no se pueden modificar porque nunca cambian.
+- **`rememberSaveable` con un `Saver` propio.** Así el resultado sobrevive al girar el móvil.
+- **Diseño adaptable.** Con el móvil en horizontal, el resultado pone la ilustración a la izquierda y los datos a la derecha.
+
+<p align="center">
+  <img src="docs/capturas/resultado_horizontal.png" width="560" alt="Resultado con el móvil en horizontal">
+</p>
+
+## Cambiar las ilustraciones
+
+Los muñecos actuales son **provisionales**. Hay 16 archivos en `app/src/main/res/drawable`, uno por estado y por sexo:
+
+```
+imc_hombre_1.xml … imc_hombre_8.xml
+imc_mujer_1.xml  … imc_mujer_8.xml
+```
+
+El número es la posición del estado en la tabla de arriba (1 = Peso insuficiente … 8 = Obesidad de tipo IV).
+
+Para poner un dibujo tuyo:
+
+1. Borra el `.xml` que quieres sustituir, por ejemplo `imc_mujer_3.xml`.
+2. Copia tu imagen en `app/src/main/res/drawable` con **el mismo nombre**: `imc_mujer_3.png`.
+3. Vuelve a ejecutar la app. No hay que tocar código.
+
+> El nombre debe ir en minúsculas, sin espacios ni tildes, o Android no lo reconoce. No puede haber a la vez un `.xml` y un `.png` con el mismo nombre.
+
+## Ejecutarlo
+
+1. Abre la carpeta del proyecto en **Android Studio** (*File → Open…*).
+2. Espera a que termine la sincronización de Gradle.
+3. Elige un emulador o un móvil y pulsa **▶ Run 'app'**.
+
+Requisitos: Android 8.0 (API 26) o superior.
+
+## Créditos
+
+- Basado en el tutorial [Login_compose](https://github.com/sulbaranjc/Login_compose) de Juan Carlos Sulbaran Gonzalez y en mi versión del login, [Login_compose](https://github.com/Gonzarrrami/Login_compose).
+- El estilo del formulario es una adaptación de [Login Page](https://www.figma.com/community/file/1244126388179404671/login-page), de Adarsh, publicado en la comunidad de Figma con licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Rangos del IMC: consenso SEEDO 2007 (Sociedad Española para el Estudio de la Obesidad).
+
+> Esta app es un ejercicio de clase. El IMC es una medida orientativa y no sustituye la valoración de un profesional sanitario.
