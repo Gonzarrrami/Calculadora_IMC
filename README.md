@@ -107,7 +107,7 @@ Cómo se usan:
 - Son PNG con **tinta negra sobre fondo transparente**. En la app se tiñen con `ColorFilter.tint`: en el formulario, blancos sobre el fondo oscuro y **rojos** cuando un valor está mal; en el resultado, del color del tema, así que cambian solos entre el modo claro y el oscuro.
 - **Solo lo que cambia va con letra normal**: lo que escribe el usuario, su nombre y el número del IMC. Todo lo demás es dibujo.
 - Los campos son `BasicTextField`, un campo de texto sin bordes. La caja dibujada se pone detrás, estirada a su tamaño (`ContentScale.FillBounds`). **Lo que escribe el usuario va con letra normal**, dentro de la caja.
-- La caja del IMC y el marco del muñeco se estiran al tamaño de lo que tienen dentro (`matchParentSize` + `FillBounds`). En el marco, el dibujo va **encima** del fondo de color: en un `Box`, lo último que se escribe es lo que se pinta delante.
+- La caja del IMC y el marco del muñeco se estiran al tamaño de lo que tienen dentro (`matchParentSize` + `FillBounds`). El fondo de color del marco es `res_marco_fondo`: el interior del marco dibujado, relleno. Tiene su misma forma y se estira igual, así que nunca sobresale. En un `Box`, lo último que se escribe es lo que se pinta delante: primero el fondo, luego el muñeco y encima el marco.
 - Cuando el botón de calcular está desactivado se ve más clarito (`alpha`) y no responde.
 - Cada dibujo tiene su `contentDescription`, así que los lectores de pantalla siguen leyendo "Nombre", "Calcular IMC", etc.
 - Están en `drawable-nodpi` para que Android no los reescale según la pantalla: el tamaño lo decide el código.

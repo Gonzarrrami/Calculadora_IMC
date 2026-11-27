@@ -2,7 +2,6 @@ package com.gonzalo.calculadora_imc.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -164,21 +163,23 @@ private fun Cabecera(resultado: ResultadoImc) {
 @Composable
 private fun Ilustracion(resultado: ResultadoImc, modifier: Modifier) {
     // En un Box lo que va DESPUÉS se pinta ENCIMA: primero el fondo, luego el muñeco y al final el marco.
+    // El fondo (res_marco_fondo) es el interior del marco dibujado, relleno: tiene su misma forma
+    // y se estira igual, así que nunca sobresale.
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Box(
+        Image(
+            painter = painterResource(R.drawable.res_marco_fondo),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primaryContainer),
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize(),
+        )
+        Image(
+            painter = painterResource(resultado.ilustracion),
+            contentDescription = "Ilustración: ${resultado.sexo.texto.lowercase()}, ${resultado.rango.nombre.lowercase()}",
             modifier = Modifier
                 .matchParentSize()
-                .padding(10.dp)
-                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(20.dp))
-                .padding(12.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                painter = painterResource(resultado.ilustracion),
-                contentDescription = "Ilustración: ${resultado.sexo.texto.lowercase()}, ${resultado.rango.nombre.lowercase()}",
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
+                .padding(24.dp),
+        )
         Image(
             painter = painterResource(R.drawable.res_marco),
             contentDescription = null,
