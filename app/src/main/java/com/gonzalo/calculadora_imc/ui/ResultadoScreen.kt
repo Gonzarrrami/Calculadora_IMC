@@ -3,7 +3,7 @@ package com.gonzalo.calculadora_imc.ui
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,19 +18,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.gonzalo.calculadora_imc.R
 import com.gonzalo.calculadora_imc.imc.ResultadoImc
 import com.gonzalo.calculadora_imc.imc.Sexo
 import com.gonzalo.calculadora_imc.imc.formatear
@@ -43,7 +48,23 @@ import com.gonzalo.calculadora_imc.ui.theme.Calculadora_IMCTheme
  *   - "resultado": nombre, sexo e IMC calculado (parámetro de DATOS).
  *   - "onVolver": una función que llamamos al pulsar el botón (parámetro de ACCIÓN).
  * La pantalla no sabe qué pasa al volver: eso lo decide quien la usa.
+ *
+ * Los textos fijos, las cajas y el botón son DIBUJOS A MANO (res/drawable-nodpi/res_*.png).
+ * Solo el nombre y el número del IMC se escriben con letra normal, porque cambian cada vez.
  */
+
+/** Los estados dibujados, en el MISMO orden que RANGOS_IMC (0 = Bajo peso ... 5 = Obesidad de grado III). */
+private val ESTADOS_DIBUJADOS = listOf(
+    R.drawable.res_estado_1, R.drawable.res_estado_2, R.drawable.res_estado_3,
+    R.drawable.res_estado_4, R.drawable.res_estado_5, R.drawable.res_estado_6,
+)
+
+/** Los intervalos dibujados ("I.M.C. entre 18,5 y 24,9"...), en el mismo orden. */
+private val INTERVALOS_DIBUJADOS = listOf(
+    R.drawable.res_intervalo_1, R.drawable.res_intervalo_2, R.drawable.res_intervalo_3,
+    R.drawable.res_intervalo_4, R.drawable.res_intervalo_5, R.drawable.res_intervalo_6,
+)
+
 @Composable
 fun ResultadoScreen(
     resultado: ResultadoImc,
@@ -93,11 +114,11 @@ fun ResultadoScreen(
     }
 }
 
-/** Nombre del usuario y el IMC dentro de un recuadro. */
+/** Nombre del usuario y el IMC dentro de la caja dibujada. */
 @Composable
 private fun Cabecera(resultado: ResultadoImc) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        // --- Nombre ---
+        // --- Nombre (letra normal: lo ha escrito el usuario) ---
         Text(
             text = resultado.nombre,
             style = MaterialTheme.typography.headlineMedium,
@@ -107,73 +128,103 @@ private fun Cabecera(resultado: ResultadoImc) {
 
         Spacer(Modifier.height(16.dp))
 
-        // --- "IMC:" y el número dentro de un recuadro ---
+        // --- "I.M.C.:" dibujado y el número dentro de la caja dibujada ---
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = "IMC:",
-                style = MaterialTheme.typography.headlineSmall,
+            Dibujo(
+                id = R.drawable.res_imc,
+                descripcion = "IMC",
                 color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.height(28.dp),
             )
             Spacer(Modifier.width(12.dp))
-            Text(
-                text = formatear(resultado.imc),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
-                    .padding(horizontal = 20.dp, vertical = 6.dp),
-            )
+            Box(contentAlignment = Alignment.Center) {
+                // matchParentSize: la caja se estira al tamaño del número, sea cual sea.
+                Image(
+                    painter = painterResource(R.drawable.res_caja_imc),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.matchParentSize(),
+                )
+                Text(
+                    text = formatear(resultado.imc),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 28.dp, vertical = 10.dp),
+                )
+            }
         }
     }
 }
 
-/** El dibujo que corresponde al sexo y al estado, dentro de un marco de color suave. */
+/**
+ * El dibujo que corresponde al sexo y al estado, dentro del marco dibujado.
+ * Dentro del marco dejamos el fondo de color suave para que los muñecos se vean bien también en modo oscuro.
+ */
 @Composable
 private fun Ilustracion(resultado: ResultadoImc, modifier: Modifier) {
-    Box(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(24.dp))
-            .padding(16.dp),
-        contentAlignment = Alignment.Center,
-    ) {
+    // En un Box lo que va DESPUÉS se pinta ENCIMA: primero el fondo, luego el muñeco y al final el marco.
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(10.dp)
+                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(20.dp))
+                .padding(12.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                painter = painterResource(resultado.ilustracion),
+                contentDescription = "Ilustración: ${resultado.sexo.texto.lowercase()}, ${resultado.rango.nombre.lowercase()}",
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
         Image(
-            painter = painterResource(resultado.ilustracion),
-            contentDescription = "Ilustración: ${resultado.sexo.texto.lowercase()}, ${resultado.rango.nombre.lowercase()}",
-            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(R.drawable.res_marco),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize(),
         )
     }
 }
 
-/** El valor cualitativo (estado según la tabla de la SEEDO), su intervalo y el botón Volver. */
+/** El valor cualitativo (estado según la tabla de la OMS), su intervalo y el botón Volver, todo dibujado. */
 @Composable
 private fun Estado(resultado: ResultadoImc, onVolver: () -> Unit) {
     val rango = resultado.rango
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = rango.nombre,
-            style = MaterialTheme.typography.headlineSmall,
+        Dibujo(
+            id = ESTADOS_DIBUJADOS[resultado.indice],
+            descripcion = rango.nombre,
             color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center,
+            modifier = Modifier.height(32.dp),
         )
-        Text(
-            text = textoIntervalo(rango.minimo, rango.maximo),
-            style = MaterialTheme.typography.bodyMedium,
+        Spacer(Modifier.height(4.dp))
+        Dibujo(
+            id = INTERVALOS_DIBUJADOS[resultado.indice],
+            descripcion = textoIntervalo(rango.minimo, rango.maximo),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.height(22.dp),
         )
 
         Spacer(Modifier.height(16.dp))
 
-        OutlinedButton(
-            onClick = onVolver,
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-        ) {
-            Text("Volver")
-        }
+        // Botón dibujado: la imagen ES el botón. clip redondea la zona del "toque" y el efecto al pulsar.
+        Dibujo(
+            id = R.drawable.res_volver,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .height(52.dp)
+                .clip(RoundedCornerShape(50))
+                .clickable(role = Role.Button, onClick = onVolver)
+                .semantics { contentDescription = "Volver" },
+        )
     }
 }
 
-/** Texto del intervalo del rango: "IMC entre 25,0 y 26,9", "IMC menor de 18,5"... */
+/** Texto del intervalo del rango, para los lectores de pantalla: "IMC entre 25,0 y 29,9", "IMC menor de 18,5"... */
 private fun textoIntervalo(minimo: Double, maximo: Double): String = when {
     minimo <= 0.0 -> "IMC menor de ${formatear(maximo)}"
     maximo.isInfinite() -> "IMC de ${formatear(minimo)} o más"

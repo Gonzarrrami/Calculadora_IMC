@@ -263,7 +263,7 @@ fun FormularioScreen(
  * Si solo le damos alto (o ancho), el otro lado se calcula solo y el dibujo no se deforma.
  */
 @Composable
-private fun Dibujo(
+internal fun Dibujo(
     @DrawableRes id: Int,
     modifier: Modifier = Modifier,
     descripcion: String? = null,

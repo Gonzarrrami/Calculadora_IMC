@@ -2,14 +2,14 @@
 
 App Android hecha 100 % con **Jetpack Compose** que calcula el **índice de masa corporal (IMC)** y muestra el estado de la persona según la clasificación oficial de la OMS, con una ilustración distinta para cada estado y para cada sexo.
 
-Todo lo que se ve es **dibujado a mano**: los muñecos del resultado y también los textos, las cajas, los círculos y el botón del formulario.
+Todo lo que se ve es **dibujado a mano**: los muñecos, y también los textos, las cajas, los círculos y los botones de las dos pantallas.
 
 No usa layouts XML, librerías de navegación ni ViewModel: solo **estado + funciones composables**.
 
 <p align="center">
   <img src="docs/capturas/formulario.png" width="220" alt="Formulario con un peso fuera de rango marcado en rojo">
-  <img src="docs/capturas/resultado.png" width="220" alt="Resultado en modo claro: IMC 33,1, obesidad de grado I">
-  <img src="docs/capturas/resultado_oscuro.png" width="220" alt="Resultado en modo oscuro: IMC 27,0, sobrepeso">
+  <img src="docs/capturas/resultado.png" width="220" alt="Resultado en modo claro: IMC 27,7, sobrepeso">
+  <img src="docs/capturas/resultado_oscuro.png" width="220" alt="Resultado en modo oscuro: IMC 32,9, obesidad de grado I">
 </p>
 
 ## Cómo funciona
@@ -95,13 +95,20 @@ Para cambiar un dibujo, sustituye el PNG por otro con **el mismo nombre** y vuel
 
 > El nombre debe ir en minúsculas, sin espacios ni tildes, o Android no lo reconoce.
 
-## El formulario dibujado a mano
+## Las pantallas dibujadas a mano
 
-Los textos, las cajas, los círculos de selección y el botón del formulario también son dibujos. Están en `app/src/main/res/drawable-nodpi`, con nombres que empiezan por `form_` (`form_titulo`, `form_caja_larga`, `form_boton`…).
+Los textos, las cajas, los círculos de selección y los botones también son dibujos. Están en `app/src/main/res/drawable-nodpi`:
 
-- Son PNG con **tinta negra sobre fondo transparente**. En la app se tiñen con `ColorFilter.tint`: blancos sobre el fondo oscuro y **rojos** cuando un valor está mal (la caja, la unidad y el aviso).
+- **Formulario**: empiezan por `form_` (`form_titulo`, `form_caja_larga`, `form_boton`…).
+- **Resultado**: empiezan por `res_` (`res_imc`, `res_caja_imc`, `res_marco`, `res_volver`, `res_estado_1` … `res_estado_6` y `res_intervalo_1` … `res_intervalo_6`). El número del estado es la columna **#** de la tabla de rangos.
+
+Cómo se usan:
+
+- Son PNG con **tinta negra sobre fondo transparente**. En la app se tiñen con `ColorFilter.tint`: en el formulario, blancos sobre el fondo oscuro y **rojos** cuando un valor está mal; en el resultado, del color del tema, así que cambian solos entre el modo claro y el oscuro.
+- **Solo lo que cambia va con letra normal**: lo que escribe el usuario, su nombre y el número del IMC. Todo lo demás es dibujo.
 - Los campos son `BasicTextField`, un campo de texto sin bordes. La caja dibujada se pone detrás, estirada a su tamaño (`ContentScale.FillBounds`). **Lo que escribe el usuario va con letra normal**, dentro de la caja.
-- Cuando el botón está desactivado se ve más clarito (`alpha`) y no responde.
+- La caja del IMC y el marco del muñeco se estiran al tamaño de lo que tienen dentro (`matchParentSize` + `FillBounds`). En el marco, el dibujo va **encima** del fondo de color: en un `Box`, lo último que se escribe es lo que se pinta delante.
+- Cuando el botón de calcular está desactivado se ve más clarito (`alpha`) y no responde.
 - Cada dibujo tiene su `contentDescription`, así que los lectores de pantalla siguen leyendo "Nombre", "Calcular IMC", etc.
 - Están en `drawable-nodpi` para que Android no los reescale según la pantalla: el tamaño lo decide el código.
 
